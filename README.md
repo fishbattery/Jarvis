@@ -10,6 +10,6 @@ Showcase:
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-    <img src="Images/Readme.png" alt="Showcase" width="500" height="500">
+    <img src="Images/Readme.png" alt="Showcase" width="1344" height="762">
 </body>
 </html>
