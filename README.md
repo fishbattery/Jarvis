@@ -1,5 +1,7 @@
 Just a rather very intelligent system
 
+Showcase:
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,6 +10,6 @@ Just a rather very intelligent system
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-    <h1>test<h1>
+    <img src="Images/Readme.png" alt="Showcase" width="500" height="600">
 </body>
 </html>
