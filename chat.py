@@ -51,11 +51,10 @@ bot_name = "Jarvis"
 print("Let's chat! (type 'quit' to exit)")
 while True:
     WAKE = "hey jarvis", "ok jarvis", "hi jarvis", "sup jarvis"
-    # sentence = "do you use credit cards?"
     sentence = get_audio()
+    # sentence = "do you use credit cards?"
     for phrase in WAKE:
-        if sentence.lower == "quit":
-            break
+        sentence = get_audio()
 
         sentence = tokenize(sentence)
         X = bag_of_words(sentence, all_words)
@@ -72,8 +71,11 @@ while True:
         if prob.item() > 0.75:
             for intent in intents['intents']:
                 if tag == intent["tag"]:
-                    print(f"{bot_name}: {random.choice(intent['responses'])}")
-                    speak(f"{random.choice(intent['responses'])}")
+
+                    response = random.choice(intent['responses'])
+
+                    print(f"{bot_name}: {response}")
+                    speak(f"{response}")
         else:
             print(f"{bot_name}: I do not understand...")
             speak(f"I do not understand")
