@@ -52,7 +52,6 @@ print("Let's chat! (type 'quit' to exit)")
 while True:
     WAKE = "hey jarvis", "ok jarvis", "hi jarvis", "sup jarvis"
     sentence = get_audio()
-    # sentence = "do you use credit cards?"
     for phrase in WAKE:
         sentence = get_audio()
 
