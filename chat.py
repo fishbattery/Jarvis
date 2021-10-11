@@ -1,22 +1,31 @@
+from __future__ import print_function
 import random
 import json
+import requests
+
+import datetime
+import time
+import webbrowser
+import random
+from bs4 import BeautifulSoup
+
+import os
+import os.path
+from googleapiclient.discovery import build
+from google_auth_oauthlib.flow import InstalledAppFlow
+from google.auth.transport.requests import Request
+from google.oauth2.credentials import Credentials 
+
+from selenium import  webdriver
 
 import torch
 
 from model import NeuralNet
 from nltk_utils import bag_of_words, tokenize
 
+import pytz
 import pyttsx3
 import speech_recognition as sr
-
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-
-with open('intents.json', 'r') as json_data:
-    intents = json.load(json_data)
-    
-
-FILE = "data.pth"
-data = torch.load(FILE)
 
 def speak(text):
     engine = pyttsx3.init()
@@ -36,6 +45,17 @@ def get_audio():
 
     return said.lower()
 
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+with open('intents.json', 'r') as json_data:
+    intents = json.load(json_data)
+    
+
+FILE = "data.pth"
+data = torch.load(FILE)
+
+
+
 input_size = data["input_size"]
 hidden_size = data["hidden_size"]
 output_size = data["output_size"]
@@ -48,33 +68,77 @@ model.load_state_dict(model_state)
 model.eval()
 
 bot_name = "Jarvis"
-print("Let's chat! (type 'quit' to exit)")
+print("Let's chat!")
+
 while True:
     WAKE = "hey jarvis", "ok jarvis", "hi jarvis", "sup jarvis"
-    sentence = get_audio()
+    text = get_audio()
     for phrase in WAKE:
-        sentence = get_audio()
+        if phrase in text:
+            print(f"{bot_name}: ready as always")
+            speak("ready as always")
 
-        sentence = tokenize(sentence)
-        X = bag_of_words(sentence, all_words)
-        X = X.reshape(1, X.shape[0])
-        X = torch.from_numpy(X).to(device)
+            text = get_audio()
 
-        output = model(X)
-        _, predicted = torch.max(output, dim=1)
+            sentence = tokenize(text)
+            X = bag_of_words(sentence, all_words)
+            X = X.reshape(1, X.shape[0])
+            X = torch.from_numpy(X).to(device)
 
-        tag = tags[predicted.item()]
+            output = model(X)
+            _, predicted = torch.max(output, dim=1)
 
-        probs = torch.softmax(output, dim=1)
-        prob = probs[0][predicted.item()]
-        if prob.item() > 0.75:
-            for intent in intents['intents']:
-                if tag == intent["tag"]:
+            tag = tags[predicted.item()]
 
-                    response = random.choice(intent['responses'])
+            probs = torch.softmax(output, dim=1)
+            prob = probs[0][predicted.item()]
+            if prob.item() > 0.75:
+                for intent in intents['intents']:
 
-                    print(f"{bot_name}: {response}")
-                    speak(f"{response}")
-        else:
-            print(f"{bot_name}: I do not understand...")
-            speak(f"I do not understand")
+                    if tag == intent["tag"]:
+
+                        response = random.choice(intent['responses'])
+
+                        print(f"{bot_name}: {response}")
+                        speak(f"{response}")
+
+                        if response == "looking ...":
+                            speak(f"what should i search?")
+                            print(f"{bot_name}: what should i search?")
+                            keyword = get_audio()
+
+                            if keyword != '':
+                                url = "https://google.com/search?q=" + keyword
+        
+                                speak("Here are the search results for " + keyword)
+                                print(f"{bot_name}: Here are the search results for " + keyword)
+                                webbrowser.open(url)
+
+                        if response == "What is the city name":
+                            headers = {
+                            	'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
+
+                            def weather(city):
+                                city = city.replace(" ", "+")
+                                res = requests.get(
+                                    f'https://www.google.com/search?q={city}&oq={city}&aqs=chrome.0.35i39l2j0l4j46j69i60.6128j1j7&sourceid=chrome&ie=UTF-8', headers=headers)
+                                print("Searching...\n")
+                                soup = BeautifulSoup(res.text, 'html.parser')
+                                location = soup.select('#wob_loc')[0].getText().strip()
+                                time = soup.select('#wob_dts')[0].getText().strip()
+                                info = soup.select('#wob_dc')[0].getText().strip()
+                                weather = soup.select('#wob_tm')[0].getText().strip()
+                                print(location)
+                                print(time)
+                                print(info)
+                                print(weather+"°C")
+
+
+                            city = get_audio()
+                            city = city + " weather"
+                            weather(f"{bot_name}: {city}")
+
+                        break
+            else:
+                print(f"{bot_name}: I do not understand...")
+                speak(f"I do not understand")

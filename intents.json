@@ -50,23 +50,28 @@
 },
 {"tag": "weather",
     "patterns": ["get me weather updates?", "how's the weather", "weather news", "weather details"],
-    "responses": ["Fetching weather updates ..."],
-"context_set": "weather"
+    "responses": ["What is the city name"],
+    "context_set": "weather"
 },
 {"tag": "google",
     "patterns": ["googling", "search google", "google it", "google", "search"],
     "responses": ["looking ..."],
-"context_set": "google"
+    "context_set": "google"
 },
 {"tag": "wikipedia",
     "patterns": ["wikipedia", "wiki"],
     "responses": ["Searching ..."],
-"context_set": "wikipedia"
+    "context_set": "wikipedia"
 },
 {"tag": "news",
     "patterns": ["get me news updates?", "todays news", "top headlines", "current news", "news headlines"],
     "responses": ["Getting news ..."],
-"context_set": "news"
+    "context_set": "news"
+},
+{"tag": "calendar",
+    "patterns": ["what do i have", "do i have any plans", "do i have plans", "am i busy"],
+    "responses": ["Getting plans ..."],
+    "context_set": "calendar"
 }
 ]
 }
