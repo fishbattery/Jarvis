@@ -9,6 +9,10 @@ import webbrowser
 import random
 from bs4 import BeautifulSoup
 
+import tkinter as tk
+from tkinter import filedialog, Text
+from tkinter.constants import YES
+
 import os
 import os.path
 from googleapiclient.discovery import build
@@ -68,16 +72,15 @@ model.load_state_dict(model_state)
 model.eval()
 
 bot_name = "Jarvis"
-print("Let's chat!")
+print("talk")    
 
 while True:
     WAKE = "hey jarvis", "ok jarvis", "hi jarvis", "sup jarvis"
     text = get_audio()
     for phrase in WAKE:
         if phrase in text:
-            print(f"{bot_name}: ready as always")
-            speak("ready as always")
-
+            print(f"{bot_name}: Ready as always sir")
+            speak("ready as always sir")
             text = get_audio()
 
             sentence = tokenize(text)
@@ -100,19 +103,8 @@ while True:
                         response = random.choice(intent['responses'])
 
                         print(f"{bot_name}: {response}")
-                        speak(f"{response}")
+                        speak(response)
 
-                        if response == "looking ...":
-                            speak(f"what should i search?")
-                            print(f"{bot_name}: what should i search?")
-                            keyword = get_audio()
-
-                            if keyword != '':
-                                url = "https://google.com/search?q=" + keyword
-        
-                                speak("Here are the search results for " + keyword)
-                                print(f"{bot_name}: Here are the search results for " + keyword)
-                                webbrowser.open(url)
 
                         if response == "What is the city name":
                             headers = {
@@ -136,9 +128,8 @@ while True:
 
                             city = get_audio()
                             city = city + " weather"
-                            weather(f"{bot_name}: {city}")
+                            print(f"{bot_name}: {city}")
+                            speak(city)
 
-                        break
-            else:
-                print(f"{bot_name}: I do not understand...")
-                speak(f"I do not understand")
+            print(f"{bot_name}: I do not understand")
+            speak(f"I do not understand")
