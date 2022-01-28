@@ -55,12 +55,12 @@
 },
 {"tag": "google",
     "patterns": ["googling", "search google", "google it", "google", "search"],
-    "responses": ["looking ..."],
+    "responses": ["what do you want to search for?"],
     "context_set": "google"
 },
 {"tag": "wikipedia",
-    "patterns": ["wikipedia", "wiki"],
-    "responses": ["Searching ..."],
+    "patterns": ["wikipedia", "wiki", "i want to learn something"],
+    "responses": ["What do you want to learn?"],
     "context_set": "wikipedia"
 },
 {"tag": "news",
@@ -72,6 +72,16 @@
     "patterns": ["what do i have", "do i have any plans", "do i have plans", "am i busy"],
     "responses": ["Getting plans ..."],
     "context_set": "calendar"
+},
+{"tag": "play-music",
+    "patterns": ["can you play me a song?", "play something", "music", "can i hear some music?"],
+    "responses": ["Song or playlist?"],
+    "context_set": "play-music"
+},
+{"tag": "device-check",
+    "patterns": ["what device is this?", "check my device", "what am i on", "what is my device name?"],
+    "responses": ["Checking device..."],
+    "context_set": "device-check"
 }
 ]
 }
